@@ -8,5 +8,5 @@ My name is Mitchell. I am from Salt Lake City born and raised.I love the outdoor
 - 👀 I’m interested in Camping, Disc golf, and snowboarding
 - 🌱 I’m currently learning about applied technology to the domain of Biology. Learning how to apply computer science methods. I enjoy reading about molecular and organic chemistry. I am learning how to juggle.
 - 💞️ I’m looking to collaborate on Human physical health related data and insight 
-- 📫 How to reach me ...GitHub
+- 
 
