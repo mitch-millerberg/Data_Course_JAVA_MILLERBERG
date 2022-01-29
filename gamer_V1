@@ -1,0 +1,46 @@
+
+
+	public static void main(String[] args) throws IOException
+	{
+		File fileName = new File("src//week3//GameScores.csv");
+    	if (fileName.exists())
+    	{
+            BufferedReader br = null;
+            String line = "";
+            String cvsSplitBy = ",";
+            int recordCount = 0;
+	    br = new BufferedReader(new FileReader(fileName));
+	    System.out.println("-----------------------------------------------------------------------------------------------------\n"
+	    		+ "----------------");
+	    System.out.println("Games Report");
+	    System.out.println("-----------------------------------------------------------------------------------------------------\n"
+	    		+ "----------------");
+	    System.out.println("Gamer \t 1\t 2\t 3\t 4\t 5\t 6\t 7\t 8\t 9\t 10\t Total Score");
+	    System.out.println("-----------------------------------------------------------------------------------------------------\n"
+	    		+ "-----------------------------------------------------------------------------------------------------");
+	    while ((line = br.readLine()) != null)
+ 	    {
+		String[] gamer = line.split(cvsSplitBy);
+		System.out.println(gamer[0] + "\t"
+			+ gamer[1] + (gamer[1].length() > 2 ? "\t" : "\t\t")
+			+ gamer[2] + (gamer[2].length() > 2 ? "\t" : "\t\t")
+			+ gamer[3] + (gamer[3].length() > 2 ? "\t" : "\t\t")
+			+ gamer[4] + (gamer[4].length() > 2 ? "\t" : "\t\t")
+			+ gamer[5] + (gamer[5].length() > 2 ? "\t" : "\t\t")
+			+ gamer[6] + (gamer[6].length() > 2 ? "\t" : "\t\t")
+			+ gamer[7] + (gamer[7].length() > 2 ? "\t" : "\t\t")
+			+ gamer[8] + (gamer[8].length() > 2 ? "\t" : "\t\t")
+			+ gamer[9] + (gamer[9].length() > 2 ? "\t" : "\t\t")
+		+ gamer[10]);
+		
+
+			recordCount++;
+	    }
+	    System.out.println("-----------------------------------------------------------------------------------------------------\n");
+	    System.out.printf("Number of Gamers: %d%n", recordCount);
+	    System.out.println("Top Gamer: ");
+	    System.out.println("-----------------------------------------------------------------------------------------------------\n");
+            br.close();
+    	}
+    }
+}
