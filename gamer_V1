@@ -3,7 +3,7 @@
  * @version 1
  * This document 
  * I still need to sum the gamer's scores and isolate the top score.
- * I still need to add a new gamer and there scores to the CSV.
+ * I still need to add a new gamer and their scores to the CSV.
  */
 
 import java.io.*;
