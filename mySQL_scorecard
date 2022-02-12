@@ -1,151 +1,95 @@
+/**
+ * 
+ */
+package week4_mySQLdemo;
+
 import java.sql.*;
+import java.util.Scanner;
 
-public class example5 {
+/**
+ * @author mitch
+ *
+ */
+public class mySQL_scorecard_test {
 
-public static void main(String[] args)
-{
-    String connectionString = "jdbc:mysql://127.0.0.1:3306/game_scores?serverTimezone=UTC";
-    String dbLogin = "javauser";
-    String dbPassword = "j4v4us3r?";
-    Connection conn = null;
-    // In this example we have expanded our SQL query to be more complicated
-    // in terms of the query itself, however for our purposes in Java, we
-    // just need to recognize what the result set will look like. In this
-    // example, the result set will be 2-dimensional, like the previous
-    // example so our approach to processing the result set data will be
-    // similar. In this example our column count will be 13 because we are
-    // asking for 13 attriutes from the database.
-    String sql = "SELECT g.gamer_id, g.first_name, g.age, s.game1, "
- 	    + "s.game2, s.game3, s.game4, s.game5, s.game6, s.game7, "
-	    + "s.game8, s.game9, s.game10 FROM gamers g LEFT JOIN "
-	    + "scores s ON g.gamer_id = s.gamer_id";
-    try
-    {
-    conn = DriverManager.getConnection(connectionString, dbLogin, dbPassword);
-	    if (conn != null)
-    {
-	try (Statement stmt = conn.createStatement(
-				ResultSet.TYPE_SCROLL_INSENSITIVE,
-				ResultSet.CONCUR_UPDATABLE);
-        		ResultSet rs = stmt.executeQuery(sql))
-     	{
-	    // Like the previous example, we need to determine the number
-	    // rows. We set the number of columns manually because we
-	    // already know how many there will be because of our SQL
-	    // statement above.
-	    int numRows;
-	    int numCols = 13;  // Number of attributes in SELECT statement
-	    rs.last();
-	    numRows = rs.getRow();
-	    System.out.printf("Number of Records: %d%n", numRows);
-	    rs.first();
-	    String[][] dbResults = new String[numRows][numCols];;
-	    // This example is a database version of our previous assignment
-            // where we read gamer scores from a .csv file. The data that
-	    // we are working with is the same data as we found in that .csv
-	    // file. So, we can create a report like we did in the previous
-	    // assignment. We need variables to store gamer totals and top
-	    // gamer values to determine the summary footer indicator as to
-	    // who is the top gamer in the data.
-	    int gamerTotal = 0;
-	    int topGamer = 0;
-	    String topName = "";
-	    // Like the previous example, we use a for loop to interate
-	    // through the rows...
-	    for (int i = 0; i < numRows; i++)
+	public static void main(String[] args)
+	  {
+	    String connectionString = "jdbc:mysql://127.0.0.1:3306/game_scores?serverTimezone=UTC";
+	    String dbLogin = "javauser";
+	    String dbPassword = "j4v4us3r?";
+	    Connection conn = null;
+	    // This is the same SQL statement as we used in TestDB2.java.
+	    String sql = "SELECT first_name FROM gamers";
+	    System.out.println("-----------------------------------------------");
+	    System.out.println("List of Gamers: ");
+	    System.out.println("-----------------------------------------------");
+	    System.out.println("-----------------------------------------------");
+	    
+	    try
 	    {
-	        // ... and in this example also, rather than an inner nested
-	        // for loop, we use the indexing to set each of the 4
-	        // columns directly. This example demonstrates this
-	        // techniques because we often need to validate or
-	        // convert (cast) values from the result set to the
-	        // array, so this shows how you could do that.
-	        dbResults[i][0] = rs.getString("gamer_id");
-	        dbResults[i][1] = rs.getString("first_name");
-            dbResults[i][2] = rs.getString("age");
-	        dbResults[i][3] = rs.getString("game1");
-	        dbResults[i][4] = rs.getString("game2");
-	        dbResults[i][5] = rs.getString("game3");
-	        dbResults[i][6] = rs.getString("game4");
-	        dbResults[i][7] = rs.getString("game5");
-	        dbResults[i][8] = rs.getString("game6");
-	        dbResults[i][9] = rs.getString("game7");
-	        dbResults[i][10] = rs.getString("game8");
-	        dbResults[i][11] = rs.getString("game9");
-	        dbResults[i][12] = rs.getString("game10");
-	        rs.next();
-	    }
-	    System.out.printf("Number of Array Rows: %d%n", dbResults.length);
-	    horizontalLine(102);
-	    // We print a header here
-	    System.out.println("   Gamer [Age]\t1\t2\t3\t4\t5\t6\t7\t8\t9\t10\tTotal");
-	    horizontalLine(102);
-	    // In this loop we print the columns for each row (gamer) and format
-	    // the output for our report. Notice the use of printf to aid in the
-	    // formatting of the output line.
-	    for (int i = 0; i < dbResults.length; i++)
-	    {
-	        System.out.printf("%s: %s [%s]\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s",
-	        dbResults[i][0],
-	        dbResults[i][1],
-	        dbResults[i][2],
-	        dbResults[i][3],
-	        dbResults[i][4],
-	        dbResults[i][5],
-	        dbResults[i][6],
-	        dbResults[i][7],
-	        dbResults[i][8],
-	        dbResults[i][9],
-	        dbResults[i][10],
-	        dbResults[i][11],
-	        dbResults[i][12]);
-	        // Here we calculate the gamer total ...
-	        gamerTotal = Integer.parseInt(dbResults[i][3]) +
-	                     Integer.parseInt(dbResults[i][4]) +
-	                     Integer.parseInt(dbResults[i][5]) +
-	                     Integer.parseInt(dbResults[i][6]) +
-	                     Integer.parseInt(dbResults[i][7]) +
-	                     Integer.parseInt(dbResults[i][8]) +
-	                     Integer.parseInt(dbResults[i][9]) +
-	                     Integer.parseInt(dbResults[i][10]) +
-	                     Integer.parseInt(dbResults[i][11]) +
-	                     Integer.parseInt(dbResults[i][12]);
-	        // ... and print it to the aggregated column ...
-	        System.out.printf("\t%d%n", gamerTotal);
-	        // ... and then compare the current gamer total
-	        // to our topGamer so far and store it if the
-	        // current gamer's total is larger.
-	        if (gamerTotal > topGamer)
+	      conn = DriverManager.getConnection(connectionString, dbLogin, dbPassword);
+	      if (conn != null)
+	      {
+	      // Note that, compared to TestDB2.java, we've added two parameters
+	      // to the createStatement() method call. These parameters are used
+	      // to allow us to read the result set both forward and backward,
+	      // which we do inside the try section as you will see.
+	      try (Statement stmt = conn.createStatement(
+	                            ResultSet.TYPE_SCROLL_INSENSITIVE,
+	                            ResultSet.CONCUR_UPDATABLE);
+	                            ResultSet rs = stmt.executeQuery(sql))
+	      {
+	        // In this example we'll be loading a simple Java array with the
+	        // values in the result set object. Since it's the simple array,
+	        // we need to set the size of the array up front. To do this,
+	        // we need to know how many records are in the result set. One
+	        // way to do this is to move to the end of the result set, capture
+	        // the the number of the last element and use that to size our
+	        // array (in this example we use a variable called numRows).
+	        int numRows;
+	        rs.last();
+	        numRows = rs.getRow();
+	        rs.first();	
+	        // reset the result set pointer
+	        // We declare our array here, with numRows as the size.
+	        String[] dbResults = new String[numRows];;
+	        // Now we can use a for loop to loop through the result set object
+	        // and populate our array with the values in the result set.
+	        for (int i = 0; i < numRows; i++)
 	        {
-			topGamer = gamerTotal;
-			topName = dbResults[i][1];
-		}
-		gamerTotal = 0;
+	          dbResults[i] = rs.getString("first_name");
+	          rs.next();	// Moves the result set object pointer to the next record
+	        }
+	        //System.out.printf("Number of Array Rows: %d%n", dbResults.length);
+	        // And now we can work with the array as usual, access the records,
+	        // print them, do calculations, etc.
+	        for (int j = 0; j < dbResults.length; j++)
+	        {
+	         // System.out.printf("Gamer %d: %s%n", j + 1, dbResults[j]);
+	        //System.out.print( dbResults[i][1] + "\n");
+	        System.out.printf(" %d:%s  \n", j + 1, dbResults[j]);
+	        //System.out.println("Enter the name of a gamer:" );
+	    	        
+	        }
+	        System.out.println("---------------------------");
+	        //System.out.println("Enter the name of a gamer you would like to print a report of:" );
+	        Scanner in = new Scanner(System.in);
+            System.out.print("Enter the name of gamer [0 to exit]: ");
+           
+	      }
+	      
+	      catch (SQLException ex)
+	      {
+	        System.out.println(ex.getMessage());
+	      }
 	    }
-	    horizontalLine(102);
-	    // Lastly, we print the top gamer's name
-	    System.out.printf("Top Gamer:\t%s%n", topName);
-	    horizontalLine(102);
-    	}
-	catch (SQLException ex)
-    	{
-    	    System.out.println(ex.getMessage());
-    	}
-        }
-}
-catch (Exception e)
-{
-    System.out.println("Database connection failed.");
-    e.printStackTrace();
-}
-}
+	    }
+	    catch (Exception e)
+	    {
+	    System.out.println("Database connection failed.");
+	    e.printStackTrace();
+	    
+	    }
+	  }
 
-private static void horizontalLine(int dashes)
-{
-    for (int i = 1; i <= dashes; i++)
-    {
-    System.out.print("-");
-    }
-    System.out.println();
-}
 }
