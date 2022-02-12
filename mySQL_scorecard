@@ -4,92 +4,115 @@
 package week4_mySQLdemo;
 
 import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Scanner;
-
 /**
- * @author mitch
- *
- */
-public class mySQL_scorecard_test {
+* @author mitch
+*mY task that I would like some help with is to display a list of all gamers' first names for the user and provide them with a prompt that
+*asks them which gamer they would like to look up in the database. The user will type in the gamer's first 
+*name and your program will get that gamer's details (full name, and scores, total, gamer average,)
+*and display a report with that gamer's information on the screen.
+* I need help with displaying the total and average score of the gamer that is selected. I am also getting an error when i attempet to create a second report. 
+* I am using a mySQL data base that is connected fine. I will provide a link the the csv data table. 
+*/
+public class Week_5 {
+	public static String[][] getDetails() { //Tutor: transfer the connection details in the method
+        String connectionString = "jdbc:mysql://127.0.0.1:3306/game_scores?serverTimezone=UTC";
+        String dbLogin = "javauser";
+        String dbPassword = "j4v4us3r?";
+        Connection conn = null;
+        String sql = "SELECT g.gamer_id, g.first_name, s.game1, "
+    	 	    + "s.game2, s.game3, s.game4, s.game5, s.game6, s.game7, "
+    		    + "s.game8, s.game9, s.game10 FROM gamers g LEFT JOIN "
+    		    + "scores s ON g.gamer_id = s.gamer_id ORDER BY first_name";
 
-	public static void main(String[] args)
-	  {
-	    String connectionString = "jdbc:mysql://127.0.0.1:3306/game_scores?serverTimezone=UTC";
-	    String dbLogin = "javauser";
-	    String dbPassword = "j4v4us3r?";
-	    Connection conn = null;
-	    // This is the same SQL statement as we used in TestDB2.java.
-	    String sql = "SELECT first_name FROM gamers";
-	    System.out.println("-----------------------------------------------");
-	    System.out.println("List of Gamers: ");
-	    System.out.println("-----------------------------------------------");
-	    System.out.println("-----------------------------------------------");
-	    
-	    try
-	    {
-	      conn = DriverManager.getConnection(connectionString, dbLogin, dbPassword);
-	      if (conn != null)
-	      {
-	      // Note that, compared to TestDB2.java, we've added two parameters
-	      // to the createStatement() method call. These parameters are used
-	      // to allow us to read the result set both forward and backward,
-	      // which we do inside the try section as you will see.
-	      try (Statement stmt = conn.createStatement(
-	                            ResultSet.TYPE_SCROLL_INSENSITIVE,
-	                            ResultSet.CONCUR_UPDATABLE);
-	                            ResultSet rs = stmt.executeQuery(sql))
-	      {
-	        // In this example we'll be loading a simple Java array with the
-	        // values in the result set object. Since it's the simple array,
-	        // we need to set the size of the array up front. To do this,
-	        // we need to know how many records are in the result set. One
-	        // way to do this is to move to the end of the result set, capture
-	        // the the number of the last element and use that to size our
-	        // array (in this example we use a variable called numRows).
-	        int numRows;
-	        rs.last();
-	        numRows = rs.getRow();
-	        rs.first();	
-	        // reset the result set pointer
-	        // We declare our array here, with numRows as the size.
-	        String[] dbResults = new String[numRows];;
-	        // Now we can use a for loop to loop through the result set object
-	        // and populate our array with the values in the result set.
-	        for (int i = 0; i < numRows; i++)
-	        {
-	          dbResults[i] = rs.getString("first_name");
-	          rs.next();	// Moves the result set object pointer to the next record
-	        }
-	        //System.out.printf("Number of Array Rows: %d%n", dbResults.length);
-	        // And now we can work with the array as usual, access the records,
-	        // print them, do calculations, etc.
-	        for (int j = 0; j < dbResults.length; j++)
-	        {
-	         // System.out.printf("Gamer %d: %s%n", j + 1, dbResults[j]);
-	        //System.out.print( dbResults[i][1] + "\n");
-	        System.out.printf(" %d:%s  \n", j + 1, dbResults[j]);
-	        //System.out.println("Enter the name of a gamer:" );
-	    	        
-	        }
-	        System.out.println("---------------------------");
-	        //System.out.println("Enter the name of a gamer you would like to print a report of:" );
-	        Scanner in = new Scanner(System.in);
-            System.out.print("Enter the name of gamer [0 to exit]: ");
-           
-	      }
-	      
-	      catch (SQLException ex)
-	      {
-	        System.out.println(ex.getMessage());
-	      }
-	    }
-	    }
-	    catch (Exception e)
-	    {
-	    System.out.println("Database connection failed.");
-	    e.printStackTrace();
-	    
-	    }
-	  }
+        String[][] dbResults = new String[100][11]; 
+	
+        try {
+            conn = DriverManager.getConnection(connectionString, dbLogin, dbPassword);
+            if (conn != null) {
+                try (Statement stmt = conn.createStatement(
+                        ResultSet.TYPE_SCROLL_INSENSITIVE,
+                        ResultSet.CONCUR_UPDATABLE);
+                        ResultSet rs = stmt.executeQuery(sql)) {
 
-}
+                    int rows = 0;
+                  
+                    while (rs.next()) { 
+                        dbResults[rows][0] = rs.getString("first_name");
+                        dbResults[rows][1] = rs.getInt("game1") + ""; 
+                        dbResults[rows][2] = rs.getInt("game2") + "";
+                        dbResults[rows][3] = rs.getString("game3") + "";
+                        dbResults[rows][4] = rs.getString("game4") + "";
+                        dbResults[rows][5] = rs.getString("game5") + "";
+                        dbResults[rows][6] = rs.getString("game6") + "";
+                        dbResults[rows][7] = rs.getString("game7") + "";
+                        dbResults[rows][8] = rs.getString("game8") + "";
+                        dbResults[rows][9] = rs.getString("game9") + "";
+                        dbResults[rows][10] = rs.getString("game10") + "";
+                        rows++;
+                        /*
+                         * should i add a new dbresult[rows][8] for the total?
+                         */
+                    }
+                } catch (SQLException ex) {
+                    System.out.println(ex.getMessage());
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Database connection failed.");
+            e.printStackTrace();
+
+        }
+        return dbResults;
+    }
+
+    public static void main(String[] args) {
+
+        System.out.println("-----------------------------------------------");
+        System.out.println("List of Gamers: ");
+        System.out.println("-----------------------------------------------");
+        System.out.println("-----------------------------------------------");
+        String[][] dbResults = getDetails();
+
+        for (int j = 0; j < dbResults.length; j++) {  
+            if (dbResults[j][0] != null) {
+                System.out.println(dbResults[j][0]);
+            
+                
+                
+            } else {
+                break;
+            }
+        }
+        System.out.println("---------------------------");
+
+        Scanner in = new Scanner(System.in);
+        String input = "";
+        do { //mitch: The loop is faulty. after one gamer report has been created the code breaks I would like this to be a loop to ask for the gamer's name until user inputs '0'. Multiple gamer reports.
+            System.out.print("Enter the name of Gamer (0 to Exit): ");
+            input = in.nextLine();
+    	    System.out.println("Gamer\t1\t2\t3\t4\t5\t6\t7\t8\t9\t10\tTotal");
+
+            if (!(input.equalsIgnoreCase("0"))) { 
+                for (int i = 0; i < dbResults.length; ++i) {
+                    if (dbResults[i][0].equalsIgnoreCase(input)) { 
+                        String scores = "";
+                        for (int j = 0; j < dbResults[i].length; ++j) {  
+                            scores = scores + dbResults[i][j] + "\t";
+                        }
+                        System.out.println(scores);
+                        break; 
+                    }
+                }
+             }
+            System.out.println("");
+        } while (!(input.equalsIgnoreCase("0")));
+        System.out.println("End of program!");
+    }
+
+
