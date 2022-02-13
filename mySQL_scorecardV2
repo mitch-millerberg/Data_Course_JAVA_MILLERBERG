@@ -1,0 +1,155 @@
+package week4_mySQLdemo;
+
+import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Scanner;
+/**
+ * @author mitch
+ * SQl and Java
+ * Print "list of gamers"
+ * List all gamers horazontily . 
+ * scanner select a gammer 
+ * 
+ */
+public class Week_5 {
+	public static String[][] getDetails() { //Tutor: transfer the connection details in the method
+        String connectionString = "jdbc:mysql://127.0.0.1:3306/game_scores?serverTimezone=UTC";
+        String dbLogin = "javauser";
+        String dbPassword = "j4v4us3r?";
+        Connection conn = null;
+
+        //Tutor: to query all the data the table, it should be like this. 
+//        NOTE: assuming that your Gamers table is like this, else, modify the query statement based on your table schema
+        //String sql = "SELECT first_name FROM gamers ORDER BY first_name";
+        String sql = "SELECT g.gamer_id, g.first_name,age, s.game1, "
+    	 	    + "s.game2, s.game3, s.game4, s.game5, s.game6, s.game7, "
+    		    + "s.game8, s.game9, s.game10 FROM gamers g LEFT JOIN "
+    		    + "scores s ON g.gamer_id = s.gamer_id ORDER BY first_name";
+
+        /*Tutor: 2D is needed to store the result of all the gamers in the Gamers table. 
+                    Knowing that there are 16 gamers, it safe to set array to 100 rows 
+                    and 11 columns(for the # of colums of the query) */
+        String[][] dbResults = new String[100][12];  //Tutor: best practice is store it in an arraylist.
+      
+        try {
+            conn = DriverManager.getConnection(connectionString, dbLogin, dbPassword);
+            if (conn != null) {
+                try (Statement stmt = conn.createStatement(
+                        ResultSet.TYPE_SCROLL_INSENSITIVE,
+                        ResultSet.CONCUR_UPDATABLE);
+                        ResultSet rs = stmt.executeQuery(sql)) {
+
+                    int rows = 0;
+                  
+                    while (rs.next()) { // transfer data from result set to array
+                        dbResults[rows][0] = rs.getString("first_name");
+                        dbResults[rows][1] = rs.getString("age") + "";
+                        dbResults[rows][2] = rs.getInt("game1") + ""; 
+                        dbResults[rows][3] = rs.getInt("game2") + "";
+                        dbResults[rows][4] = rs.getString("game3") + "";
+                        dbResults[rows][5] = rs.getString("game4") + "";
+                        dbResults[rows][6] = rs.getString("game5") + "";
+                        dbResults[rows][7] = rs.getString("game6") + "";
+                        dbResults[rows][8] = rs.getString("game7") + "";
+                        dbResults[rows][9] = rs.getString("game8") + "";
+                        dbResults[rows][10] = rs.getString("game9") + "";
+                        dbResults[rows][11] = rs.getString("game10") + "";
+                       // dbResults[rows][12] =rs.getString("Total") + "";
+                        rows++;
+                        /*
+                         
+                        for (int i = 0; i < dbResults.length; i++)
+                	    {
+                	        System.out.printf("%s: %s [%s]\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s",
+                	        dbResults[rows][0],
+                	        dbResults[rows][1],
+                	        dbResults[rows][2],
+                	        dbResults[rows][3],
+                	        dbResults[rows][4],
+                	        dbResults[rows][5],
+                	        dbResults[rows][6],
+                	        dbResults[rows][7],
+                	        dbResults[rows][8],
+                	        dbResults[rows][9],
+                	        dbResults[rows][10],
+                	        dbResults[rows][11],
+                	        dbResults[rows][12]);
+                        
+                        gamerTotal = 
+                        		                       	        
+                        	 Integer.parseInt(dbResults[rows][3]) +
+   		                     Integer.parseInt(dbResults[rows][4]) +
+   		                     Integer.parseInt(dbResults[rows][5]) +
+   		                     Integer.parseInt(dbResults[rows][6]) +
+   		                     Integer.parseInt(dbResults[rows][7]) +
+   		                     Integer.parseInt(dbResults[rows][8]) +
+   		                     Integer.parseInt(dbResults[rows][9]) +
+   		                     Integer.parseInt(dbResults[rows][10]) +
+   		                     Integer.parseInt(dbResults[rows][11]) +
+   		                     Integer.parseInt(dbResults[rows][12]);
+                        
+                        System.out.printf("\t%d%n", gamerTotal);
+                        
+                    }
+                    */
+                    }
+                    
+                } catch (SQLException ex) {
+                    System.out.println(ex.getMessage());
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Database connection failed.");
+            e.printStackTrace();
+
+        }
+        return dbResults;
+    }
+
+    public static void main(String[] args) {
+
+        System.out.println("-----------------------------------------------");
+        System.out.println("List of Gamers: ");
+        System.out.println("-----------------------------------------------");
+        System.out.println("-----------------------------------------------");
+        String[][] dbResults = getDetails();
+
+        for (int j = 0; j < dbResults.length; j++) {  //Tutor: to display the names of the gamers
+            if (dbResults[j][0] != null) {
+                System.out.println(dbResults[j][0]);
+            
+                
+                
+            } else {
+                break;
+            }
+        }
+        System.out.println("---------------------------");
+
+        Scanner in = new Scanner(System.in);
+        String input = "";
+        do { //Tutor: create a loop to ask for the gamer's name until user inputs '0'
+            System.out.print("Enter the name of Gamer (0 to Exit): ");
+            input = in.nextLine();
+    	    System.out.println("Gamer\tAGE\t1\t2\t3\t4\t5\t6\t7\t8\t9\t10\tTotal\tAverage game score");
+
+            if (!(input.equalsIgnoreCase("0"))) { //Tutor: if input is not '0'
+                for (int i = 0; i < dbResults.length; ++i) {
+                    if (dbResults[i][0].equalsIgnoreCase(input)) { //Tutor: seach the name in the loop
+                        String scores = "";
+                        for (int j = 0; j < dbResults[i].length; ++j) {  //Tutor: get all the stores and store it in a string
+                            scores = scores + dbResults[i][j] + "\t";
+                        }
+                        System.out.println(scores); //Tutor: output the result
+                        break; //Tutor: terminate the loop
+                    }
+                }
+             }
+            System.out.println("");
+        } while (!(input.equalsIgnoreCase("0")));
+        System.out.println("End of program!");
+    }
