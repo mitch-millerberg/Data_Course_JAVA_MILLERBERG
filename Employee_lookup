@@ -89,9 +89,9 @@ public class EmployeeManager {
                 employee.setSalary(Double.parseDouble(employees[i][5]));
                 employee.setStatus(employees[i][6]);
                 employee.setSupervisor_id(Integer.parseInt(employees[i][7]));
-                employee.setInsurance(Integer.parseInt(employees[i][8]));
+                employee.setInsurance(Integer.parseInt(employees[i][10]));
                 employee.setDepartment(employees[i][9]);
-                employee.setBonus(Integer.parseInt(employees[i][10]) > 0);
+                employee.setBonus(Integer.parseInt(employees[i][8]) > 0);
                 employee.setHiredate(employees[i][11]);
                 employee.setPhone(employees[i][12]);
 
