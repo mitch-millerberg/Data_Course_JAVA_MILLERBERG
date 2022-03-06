@@ -1,134 +1,145 @@
 package week_7;
 
-public class main_class_employee 
-{
-	 int employeeID;
-	    String firstName;
-	    String lastName;
-	    int age;
-	    String title;
-	    public double salary;
-	    String status;
-	    int supervisor_id;
-	    boolean bonus;
-	    int insurance;
-	    String hiredate;
-	    String phone;
-	    
-	    public main_class_employee (int employeeID)
-	    {
-	        this.employeeID =employeeID;
-	    }
+public class Employee {
+	private int employeeID;
+	private String firstName;
+	private String lastName;
+	private int age;
+	private String title;
+	private double salary;
+	private String status;
+	private int supervisor_id;
+	private boolean bonus;
+	private int insurance;
+	private String department;
+	private String hiredate;
+	private String phone;
 
-	    public String getFirstName()
-	    {
-	        return this.firstName;
-	    }
+	public Employee(int employeeID) {
+		this.employeeID = employeeID;
+	}
 
-	    public void setFirstName(String firstName)
-	    {
-	        this.firstName = firstName;
+	public String getFirstName() {
+		return this.firstName;
+	}
 
-	    }
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 
-	    public int getEmployeeID() {
-	        return employeeID;
-	    }
+	}
 
-	    public void setEmployeeID(int employeeID) {
-	        this.employeeID = employeeID;
-	    }
+	public int getEmployeeID() {
+		return employeeID;
+	}
 
-	    public int getAge() {
-	        return age;
-	    }
+	public void setEmployeeID(int employeeID) {
+		this.employeeID = employeeID;
+	}
 
-	    public String getTitle() {
-	        return title;
-	    }
+	public int getAge() {
+		return age;
+	}
 
-	    public void setTitle(String title) {
-	        this.title = title;
-	    }
+	public String getTitle() {
+		return title;
+	}
 
-	    public void setSalary(double salary) {
-	        this.salary = salary;
-	    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-	    public String getLastName() {
-	        return lastName;
-	    }
+	public void setSalary(double salary) {
+		this.salary = salary;
+	}
 
-	    public void setLastName(String lastName) {
-	        this.lastName = lastName;
-	    }
-	    
-	    
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
 	public double getSalary() {
-			return salary;
+		return salary;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String code) {
+		switch (code) {
+			case "F":
+				this.status = "Full-time";
+				break;
+			case "P":
+				this.status = "Part-time";
+				break;
+			case "C":
+				this.status = "contractor";
+				break;
+			case "I":
+				this.status = "Intern";
+				break;
+			default:
+				this.status = "Unknown";
 		}
 
-	    public String getStatus() {
-	        return status;
-	    }
+	}
 
-	    public void setStatus(String code) {
-	        switch (code) {
-	            case "F":
-	                this.status = "Full-time";
-	                break;
-	            case "P":
-	                this.status = "Part-time";
-	                break;
-	            case "C":
-	                this.status = "contractor";
-	                break;
-	            case "I":
-	                this.status = "Intern";
-	                break;
-	            default:
-	                this.status = "Unknown";
-	        }
-	
-	    }
+	public int getSupervisor_id() {
+		return supervisor_id;
+	}
 
-		public int getSupervisor_id() {
-			return supervisor_id;
-		}
+	public void setSupervisor_id(int supervisor_id) {
+		this.supervisor_id = supervisor_id;
+	}
 
-		public void setSupervisor_id(int supervisor_id) {
-			this.supervisor_id = supervisor_id;
-		}
+	public boolean isBonus() {
+		return bonus;
+	}
 
-		public boolean isBonus() {
-			return bonus;
-		}
+	public void setBonus(boolean bonus) {
+		this.bonus = bonus;
+	}
 
-		public void setBonus(boolean bonus) {
-			this.bonus = bonus;
-		}
+	public int getInsurance() {
+		return insurance;
+	}
 
-		public int getInsurance() {
-			return insurance;
-		}
+	public void setInsurance(int insurance) {
+		this.insurance = insurance;
+	}
 
-		public void setInsurance(int insurance) {
-			this.insurance = insurance;
-		}
+	public String getHiredate() {
+		return hiredate;
+	}
 
-		public String getHiredate() {
-			return hiredate;
-		}
+	public void setHiredate(String hiredate) {
+		this.hiredate = hiredate;
+	}
 
-		public void setHiredate(String hiredate) {
-			this.hiredate = hiredate;
-		}
+	public String getPhone() {
+		return phone;
+	}
 
-		public String getPhone() {
-			return phone;
-		}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
 
-		public void setPhone(String phone) {
-			this.phone = phone;
-		}
+	// setter method for the age
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	// getter method for the department
+	public String getDepartment() {
+		return department;
+	}
+
+	// setter method for the department
+	public void setDepartment(String department) {
+		this.department = department;
+	}
 }
