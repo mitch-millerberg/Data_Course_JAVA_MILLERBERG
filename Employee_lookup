@@ -1,104 +1,145 @@
 package week_7;
-
-/**
- * look up employee data based on their employeeID and populate 
- * the instance variables with the array elements for that employee.
- * 
- */
-
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.BufferedReader;
-import java.util.*;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
-import week_6.Employee;
-public class employee_data {
+public class EmployeeManager {
+
 	
-	public static void main(String[] args) throws IOException
-	{
-		String fileName = "C:\\Users\\mitch\\Downloads\\EmployeeData.txt";
-		File dataFile = new File(fileName);
-		BufferedReader br = new BufferedReader(new FileReader(dataFile));
-        ArrayList employeeRecords = new ArrayList();
-		String line = "";
-		while ((line = br.readLine()) != null)
-		{
-			String field = line;
-			employeeRecords.add(field);
-		}
-		 Collections.sort(employeeRecords);
-			System.out.println("------------------------------------------");
-			System.out.println("Employee List");
-            System.out.printf("Number of Employees: %d%n", employeeRecords.size());
-			System.out.println("------------------------------------------");
-			
-			int employeeSelected ;
-	        Scanner input = new Scanner(System.in);
-			System.out.println("Look up Employee ID:");
-	        
-	        employeeSelected = input.nextInt();
-           System.out.print("\nYou selected employee ID: " + employeeSelected );
-           /* how do i return just the name for this employee ID?
-            * 
-            */
-           System.out.println();
-     	   System.out.println("**Employee INFO**");
-     	   System.out.println("Employee ID: " + employeeSelected );
-     	   System.out.println("Supervisor_id: ");
-     	   System.out.println("Department: ");
-     	   System.out.println("Hire Date: ");
-     	   System.out.println("Phone Number: ");
-     	   System.out.println("Bonus Y/N: ");
-     	   System.out.println("Net Pay: ");
-           
-   			System.out.println();
-   			System.out.println();  
-   			
-   			Employee e1 = new Employee(1);
+	// 2-dimensional array of string to store employee data
+    private String[][] employees;
 
-   			e1.setFirstName("Bob");
-   	        e1.setLastName("Levin");
-   	        e1.setStatus("F");
-   	        e1.setTitle("Network Administrator");
-   	        e1.setAge(28);
-   	        e1.setSalary(83500);
-   	        e1.setEmployeeID(1);
-   	        
-   	        
-   	    System.out.println("**Employee INFO**");
-   	  	System.out.println("Name: " + e1.getFirstName() +
- 				" " + e1.getLastName());
- 		System.out.println("Employee ID: " + e1.getEmployeeID());
- 		System.out.println("Job Title: "+ e1.getTitle());
- 		System.out.println("Age: "+ e1.getAge());
-        System.out.println("Salary: "+"$"+ e1.salary);
- 		System.out.println("Employment Status: " + e1.getStatus() + "\n" );   
- 		
-   	        
+    // count of the employee data in the employees array
+    private int employeeCount;
 
+    // constructor that accepts the size of the employees array
+    public EmployeeManager(int size) {
 
-			for (int i = 0; i < employeeRecords.size(); i++)
-			{
-				System.out.printf("%s%n", employeeRecords.get(i));
-			}
-			br.close();
-			employeeRecords = null;
-			
-		System.out.println();
-		System.out.println();
-		br.close();
+        // initialize the employees array with rows equal to size and with 13 columns
+        this.employees = new String[size][13];
+
+        // initialize the count of employees in the array to 0
+        this.employeeCount = 0;
+
+        // read the employee data from the csv file
+        this.readEmployeeData();
+    }
+
+    // reads the employee data from the csv file
+    public void readEmployeeData() {
+
+        // prepare to capture FileNotFoundException
+        try {
+
+            // create a Scanner object to read the csv file
+            Scanner scanner = new Scanner(new File("C:\\Users\\mitch\\Downloads\\EmployeeData.txt"));
+
+            // loop through each line of the file
+            while (scanner.hasNextLine()) {
+
+                // read a line from the file
+                String line = scanner.nextLine();
+
+                // split the line string into an array of string using comma (,) as delimiter
+                String[] columns = line.split(",");
+
+                // add the array of columns to the employees array
+                this.employees[this.employeeCount] = columns;
+
+                // increment the count of employees
+                this.employeeCount++;
+            }
+
+            // catch FileNotFoundException
+        } catch (FileNotFoundException e) {
+
+            // print an error message
+            System.out.println("Error reading the file.");
+
+            // terminate the program
+            System.exit(1);
+        }
+
+    }
+
+    // getter method for the employees array
+    public String[][] getEmployees() {
+        return employees;
+    }
+
+    // gets an Employee object with the specified id
+    public Employee getEmployeeById(int id) {
+
+        // loop through each employee in the employees array
+        for (int i = 0; i < employeeCount; i++) {
+
+            // check if the id in the employees array is equal to the specified id
+            if (Integer.parseInt(employees[i][0]) == id) {
+
+                // the employee with the specified id has been found
+                // create a new instance of an Employee
+                Employee employee = new Employee(id);
+
+                // set the instance variables of the new employee using the corresponding column
+                // from the employees array converting to the appropriate 
+                employee.setFirstName(employees[i][1]);
+                employee.setLastName(employees[i][2]);
+                employee.setAge(Integer.parseInt(employees[i][3]));
+                employee.setTitle(employees[i][4]);
+                employee.setSalary(Double.parseDouble(employees[i][5]));
+                employee.setStatus(employees[i][6]);
+                employee.setSupervisor_id(Integer.parseInt(employees[i][7]));
+                employee.setInsurance(Integer.parseInt(employees[i][8]));
+                employee.setDepartment(employees[i][9]);
+                employee.setBonus(Integer.parseInt(employees[i][10]) > 0);
+                employee.setHiredate(employees[i][11]);
+                employee.setPhone(employees[i][12]);
+
+                // return the Employee instance
+                return employee;
+            }
+        }
+
+        // the employee with the specified id does not exist
+        // return null
+        return null;
+    }
+
+    // test the class
+    public static void main(String[] args) {
+
+        // create an instance of the EmployeeManager class
+        EmployeeManager em = new EmployeeManager(100);
+
+        int employeeSelected ;
+        Scanner input = new Scanner(System.in);
+		System.out.println("\n\tLook up info by Employee ID (1-16) :");
+        
+        employeeSelected = input.nextInt();
+        
+        Employee emp1 = em.getEmployeeById(employeeSelected);
+
+        // print the data for each input employee ID 
+
+        System.out.println("\t** INFO for Employee ID: " + employeeSelected +" **");
+        System.out.println("Name: " + emp1.getFirstName() +
+				" " + emp1.getLastName());
+		System.out.println("Employee ID: " + emp1.getEmployeeID());
+		System.out.println("Job Title: "+ emp1.getTitle());
+		System.out.println("Age: "+ emp1.getAge());
+		System.out.println("Employment Status: " + emp1.getStatus());
+		System.out.println("supervior ID: " + emp1.getSupervisor_id());
+		/*
+		 * How do i Get the supervisor's name from the data source
+		 *  based on their ID that is in the data.
+		 */
+		System.out.println("insurance type: " + emp1.getInsurance());
+		System.out.println("Hire date: "+ emp1.getHiredate());
+		System.out.println("Phone #: "+ emp1.getPhone());
+		System.out.println("Gross Salary: " + emp1.getSalary());
 		
-		Scanner sc = new Scanner(new File("C:\\Users\\mitch\\Downloads\\EmployeeData.csv"));
-		sc.useDelimiter(",");
-		while (sc.hasNext())  //returns a boolean value  
-		{  
-		System.out.print(sc.next());  //find and returns the next complete token from this scanner  
-		}   
-		sc.close();  //closes the scanner  
-	
+    }
 
-
-	}
 
 }
+
