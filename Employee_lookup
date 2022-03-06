@@ -1,0 +1,104 @@
+package week_7;
+
+/**
+ * look up employee data based on their employeeID and populate 
+ * the instance variables with the array elements for that employee.
+ * 
+ */
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.util.*;
+
+import week_6.Employee;
+public class employee_data {
+	
+	public static void main(String[] args) throws IOException
+	{
+		String fileName = "C:\\Users\\mitch\\Downloads\\EmployeeData.txt";
+		File dataFile = new File(fileName);
+		BufferedReader br = new BufferedReader(new FileReader(dataFile));
+        ArrayList employeeRecords = new ArrayList();
+		String line = "";
+		while ((line = br.readLine()) != null)
+		{
+			String field = line;
+			employeeRecords.add(field);
+		}
+		 Collections.sort(employeeRecords);
+			System.out.println("------------------------------------------");
+			System.out.println("Employee List");
+            System.out.printf("Number of Employees: %d%n", employeeRecords.size());
+			System.out.println("------------------------------------------");
+			
+			int employeeSelected ;
+	        Scanner input = new Scanner(System.in);
+			System.out.println("Look up Employee ID:");
+	        
+	        employeeSelected = input.nextInt();
+           System.out.print("\nYou selected employee ID: " + employeeSelected );
+           /* how do i return just the name for this employee ID?
+            * 
+            */
+           System.out.println();
+     	   System.out.println("**Employee INFO**");
+     	   System.out.println("Employee ID: " + employeeSelected );
+     	   System.out.println("Supervisor_id: ");
+     	   System.out.println("Department: ");
+     	   System.out.println("Hire Date: ");
+     	   System.out.println("Phone Number: ");
+     	   System.out.println("Bonus Y/N: ");
+     	   System.out.println("Net Pay: ");
+           
+   			System.out.println();
+   			System.out.println();  
+   			
+   			Employee e1 = new Employee(1);
+
+   			e1.setFirstName("Bob");
+   	        e1.setLastName("Levin");
+   	        e1.setStatus("F");
+   	        e1.setTitle("Network Administrator");
+   	        e1.setAge(28);
+   	        e1.setSalary(83500);
+   	        e1.setEmployeeID(1);
+   	        
+   	        
+   	    System.out.println("**Employee INFO**");
+   	  	System.out.println("Name: " + e1.getFirstName() +
+ 				" " + e1.getLastName());
+ 		System.out.println("Employee ID: " + e1.getEmployeeID());
+ 		System.out.println("Job Title: "+ e1.getTitle());
+ 		System.out.println("Age: "+ e1.getAge());
+        System.out.println("Salary: "+"$"+ e1.salary);
+ 		System.out.println("Employment Status: " + e1.getStatus() + "\n" );   
+ 		
+   	        
+
+
+			for (int i = 0; i < employeeRecords.size(); i++)
+			{
+				System.out.printf("%s%n", employeeRecords.get(i));
+			}
+			br.close();
+			employeeRecords = null;
+			
+		System.out.println();
+		System.out.println();
+		br.close();
+		
+		Scanner sc = new Scanner(new File("C:\\Users\\mitch\\Downloads\\EmployeeData.csv"));
+		sc.useDelimiter(",");
+		while (sc.hasNext())  //returns a boolean value  
+		{  
+		System.out.print(sc.next());  //find and returns the next complete token from this scanner  
+		}   
+		sc.close();  //closes the scanner  
+	
+
+
+	}
+
+}
