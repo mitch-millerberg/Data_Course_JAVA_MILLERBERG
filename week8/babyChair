@@ -1,0 +1,45 @@
+package week_8;
+
+public class BabyChair extends Chair
+{
+
+	boolean foodTray;
+	boolean room;
+
+	public BabyChair(String manufacturer, String model, String color,
+						double mfgCost, double retailPrice, int itemWeight,
+						boolean foodTray, boolean room) {
+		super(manufacturer, model,color, itemWeight, mfgCost, retailPrice);
+		this.foodTray = foodTray;
+		this.room = room;
+	}
+
+	public boolean isFoodTray() {
+		return foodTray;
+	}
+
+	public void setFoodTray(boolean foodTray) {
+		this.foodTray = foodTray;
+	}
+
+	public boolean isRoom() {
+		return room;
+	}
+
+	public void setRoom(boolean room) {
+		this.room = room;
+	}
+
+	public String toString() {
+		return super.toString() + 
+				"\tfoodTray = " + (this.foodTray ? "Yes" : "No") + 
+				
+				/*
+				 * how do i fix the room value? change it to a string not boolean? (kitchen, patio, office)
+				 * 
+				 */
+				
+				"\n\troom = " + (this.room ? "Yes" : "No") + "\n";
+	}
+
+}
