@@ -1,0 +1,20 @@
+package Week_12;
+
+public class Employee_test_main
+{
+
+	public static void main(String[] args)
+	{
+		MyUtilities utils = new MyUtilities();
+
+		int myNum =3;
+		String myString ="I want to become a better coder.";
+
+		
+		System.out.printf("3 cubed is %d%n", utils.cubeIt(myNum));
+		System.out.printf("Number of spaces in '%s' is %d%n",
+				myString, utils.countSpaces(myString));
+		
+	}
+
+}
